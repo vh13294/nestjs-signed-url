@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "declaration": true,
+    "outDir": "./dist"
+  },
+  "include": ["lib/**/*"],
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+}
