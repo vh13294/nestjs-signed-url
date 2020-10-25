@@ -6,9 +6,9 @@
 
 <p align="center">
 <a href="https://www.codefactor.io/repository/github/vh13294/nestjs-signed-url"><img src="https://www.codefactor.io/repository/github/vh13294/nestjs-signed-url/badge" alt="CodeFactor" /></a>
-<a href="https://www.npmjs.com/package/@vh13294/nestjs-signed-url"><img src="https://img.shields.io/npm/v/@vh13294/nestjs-signed-url.svg?style=flat-square&sanitize=true" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/package/@vh13294/nestjs-signed-url"><img src="https://img.shields.io/npm/dm/@vh13294/nestjs-signed-url.svg?style=flat-square&sanitize=true" alt="NPM Downloads" /></a>
-<a href="#"><img src="https://img.shields.io/npm/l/@vh13294/nestjs-signed-url.svg?colorB=black&label=LICENSE&style=flat-square&sanitize=true" alt="License"/></a>
+<a href="https://www.npmjs.com/package/nestjs-signed-url"><img src="https://img.shields.io/npm/v/nestjs-signed-url.svg?style=flat-square&sanitize=true" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/package/nestjs-signed-url"><img src="https://img.shields.io/npm/dm/nestjs-signed-url.svg?style=flat-square&sanitize=true" alt="NPM Downloads" /></a>
+<a href="#"><img src="https://img.shields.io/npm/l/nestjs-signed-url.svg?colorB=black&label=LICENSE&style=flat-square&sanitize=true" alt="License"/></a>
 
 </p>
 
@@ -19,18 +19,18 @@
 # Installation
 
 ```bash
-npm i --save nestjs-rate-limiter
+npm i --save nestjs-signed-url
 ```
 
 Or if you use Yarn:
 
 ```bash
-yarn add nestjs-rate-limiter
+yarn add nestjs-signed-url
 ```
 
 # Requirements
 
-`nestjs-rate-limiter` is built to work with Nest 6 and newer versions.
+`nestjs-signed-url` is built to work with Nest 6 and newer versions.
 
 # Basic Usage
 
@@ -41,7 +41,7 @@ First you need to import this module into your main application module:
 > app.module.ts
 
 ```ts
-import { RateLimiterModule } from 'nestjs-rate-limiter';
+import { RateLimiterModule } from 'nestjs-signed-url';
 
 @Module({
     imports: [RateLimiterModule],
@@ -56,7 +56,7 @@ Now you need to register the interceptor. You can do this only on some routes:
 > app.controller.ts
 
 ```ts
-import { RateLimiterInterceptor } from 'nestjs-rate-limiter';
+import { RateLimiterInterceptor } from 'nestjs-signed-url';
 
 @UseInterceptors(RateLimiterInterceptor)
 @Get('/login')
@@ -71,7 +71,7 @@ Or you can choose to register the interceptor globally:
 
 ```ts
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { RateLimiterModule, RateLimiterInterceptor } from 'nestjs-rate-limiter';
+import { RateLimiterModule, RateLimiterInterceptor } from 'nestjs-signed-url';
 
 @Module({
     imports: [RateLimiterModule],
@@ -93,7 +93,7 @@ route basis:
 > app.controller.ts
 
 ```ts
-import { RateLimit } from 'nestjs-rate-limiter';
+import { RateLimit } from 'nestjs-signed-url';
 
 @RateLimit({ points: 1, duration: 60, errorMessage: 'Accounts cannot be created more than once in per minute' })
 @Get('/signup')
@@ -104,7 +104,7 @@ public async signUp() {
 
 ### With All Options
 
-The usage of the limiter options is as in the code block below. For an explanation of the each option, please see <code>[options](https://github.com/ozkanonur/nestjs-rate-limiter#options)</code>.
+The usage of the limiter options is as in the code block below. For an explanation of the each option, please see <code>[options](https://github.com/ozkanonur/nestjs-signed-url#options)</code>.
 
 ```ts
 @Module({

@@ -1,5 +1,5 @@
 {
-  "name": "@vh13294/nestjs-signed-url",
+  "name": "nestjs-signed-url",
   "version": "1.0.0",
   "description": "NestJs library for making signed url",
   "keywords": [
