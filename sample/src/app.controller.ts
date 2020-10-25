@@ -23,7 +23,7 @@ export class AppController {
     const params = {
       id: 1,
       reset: false,
-      signed: 2,
+      // signed: 2,
     }
     const signedUrl = this.signedUrlService.signedControllerRoute(
       AppController,

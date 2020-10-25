@@ -1,7 +1,6 @@
 import { createHmac, timingSafeEqual } from 'crypto';
 import { PATH_METADATA } from '@nestjs/common/constants';
 import { Controller } from '@nestjs/common/interfaces/controllers/controller.interface';
-import { UnauthorizedException } from '@nestjs/common';
 import { RESERVED_PARAM_NAMES } from './signed-url.constants';
 
 export function getControllerMethodRoute(
@@ -32,9 +31,6 @@ export function generateHmac(url: string, secret: string): string {
 }
 
 export function isSignatureEqual(signed: string, hmacValue: string): boolean {
-    if (!signed || !hmacValue) {
-        throw new UnauthorizedException()
-    }
     return timingSafeEqual(Buffer.from(signed), Buffer.from(hmacValue))
 }
 

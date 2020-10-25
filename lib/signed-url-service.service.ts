@@ -1,5 +1,5 @@
 import { ApplicationConfig } from '@nestjs/core';
-import { ConflictException, Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Controller } from '@nestjs/common/interfaces/controllers/controller.interface';
 import { Request } from 'express';
 
@@ -21,6 +21,10 @@ export class SignedUrlService {
             throw new Error('The secret key must not be empty');
         } else if (this.signedUrlModuleOptions.secret.length < 32) {
             Logger.warn('[signedUrlModuleOptions] A min key length of 256-bit or 32-characters is recommended')
+        }
+
+        if(!this.signedUrlModuleOptions.appUrl) {
+            throw new Error('The app url must not be empty');
         }
     }
 
@@ -45,7 +49,7 @@ export class SignedUrlService {
         params: any = {},
     ): string {
         if(checkIfParamsHasReservedKeys(params)) {
-            throw new ConflictException(
+            throw new Error(
                 `Your Query Params have a reserved parameter for signing a route. eg. [${RESERVED_PARAM_NAMES.join(', ')}]`
             );
         }
@@ -76,6 +80,10 @@ export class SignedUrlService {
         const hmac = generateHmac(fullUrl, this.signedUrlModuleOptions.secret)
         const expiryDate = new Date(restQuery.expirationDate)
 
-        return isSignatureEqual(signed, hmac) && signatureHasNotExpired(expiryDate);
+        if (!signed || !hmac) {
+            throw new Error('Invalid Url')
+        } else {
+            return isSignatureEqual(signed, hmac) && signatureHasNotExpired(expiryDate);
+        }
     }
 }
