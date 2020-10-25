@@ -50,7 +50,8 @@ export class SignedUrlService {
     ): string {
         if(checkIfParamsHasReservedKeys(params)) {
             throw new Error(
-                `Your Query Params have a reserved parameter for signing a route. eg. [${RESERVED_PARAM_NAMES.join(', ')}]`
+                'Your target URL has a query param that have a reserved parameter for signing a route.' +
+                ` eg. [${RESERVED_PARAM_NAMES.join(', ')}]`
             );
         }
         const prefix = this.applicationConfig.getGlobalPrefix()
