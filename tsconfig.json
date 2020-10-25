@@ -1,8 +1,17 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,
+    "module": "commonjs",
     "declaration": true,
-    "outDir": "./dist"
+    "strict": true,
+    "removeComments": true,
+    "noLib": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es2019",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./lib",
+    "skipLibCheck": true
   },
   "include": ["lib/**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]

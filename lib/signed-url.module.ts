@@ -75,7 +75,7 @@ export class SignedUrlModule {
             useFactory: async (optionsFactory: SignedUrlModuleOptionsFactory) => {
                 return optionsFactory.createSignedUrlOptions();
             },
-            inject: [options.useExisting || options.useClass],
+            inject: [options.useExisting! || options.useClass!],
         };
     }
 }

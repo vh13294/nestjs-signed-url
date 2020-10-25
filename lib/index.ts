@@ -1,5 +1,4 @@
-// export * from './decorators';
-// export * from './document-builder';
-// export * from './interfaces';
-// export * from './swagger-module';
-// export * from './type-helpers';
+export * from './signed-url-guard';
+export * from './signed-url-options.interface';
+export * from './signed-url-service.service';
+export * from './signed-url.module';

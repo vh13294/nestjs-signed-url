@@ -6,19 +6,19 @@ import { RESERVED_PARAM_NAMES } from './signed-url.constants';
 
 export function getControllerMethodRoute(
     controller: Controller,
-    controllerMethod: unknown,
+    controllerMethod: any = {},
 ): string {
     const controllerRoute = Reflect.getMetadata(PATH_METADATA, controller)
     const methodRoute = Reflect.getMetadata(PATH_METADATA, controllerMethod)
-    return this.joinRoutes(controllerRoute, methodRoute)
+    return joinRoutes(controllerRoute, methodRoute)
 }
 
 export function isRouteNotEmpty(route: string): boolean {
-    return (route && route !== '/')
+    return (!!route && route !== '/')
 }
 
 export function joinRoutes(...routes: string[]): string {
-    return routes.filter(route => this.isRouteNotEmpty(route)).join('/')
+    return routes.filter(route => isRouteNotEmpty(route)).join('/')
 }
 
 export function appendParams(route: string, params: string): string {

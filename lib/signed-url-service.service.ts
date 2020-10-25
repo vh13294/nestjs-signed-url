@@ -26,7 +26,7 @@ export class SignedUrlService {
 
     public signedControllerRoute(
         controller: Controller,
-        controllerMethod: unknown,
+        controllerMethod: any = {},
         expirationDate: Date,
         params: any = {},
     ): string {
