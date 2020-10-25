@@ -1,14 +1,14 @@
 <p align="center">
-  <img width="50%" src="https://user-images.githubusercontent.com/17086745/97110220-8bf2f780-170a-11eb-9bf4-ca38b8d41be9.png" />
+  <img width="40%" src="https://user-images.githubusercontent.com/17086745/97110220-8bf2f780-170a-11eb-9bf4-ca38b8d41be9.png" />
 </p>
 
 <h2 align="center">Signed URL Module for NestJS</h2>
 
 <p align="center">
 <a href="https://www.codefactor.io/repository/github/vh13294/nestjs-signed-url"><img src="https://www.codefactor.io/repository/github/vh13294/nestjs-signed-url/badge" alt="CodeFactor" /></a>
-<a href="https://www.npmjs.com/package/nestjs-rate-limiter"><img src="https://img.shields.io/npm/v/nestjs-rate-limiter.svg?style=flat-square&sanitize=true" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/package/nestjs-rate-limiter"><img src="https://img.shields.io/npm/dm/nestjs-rate-limiter.svg?style=flat-square&sanitize=true" alt="NPM Downloads" /></a>
-<a href="#"><img src="https://img.shields.io/npm/l/nestjs-rate-limiter.svg?colorB=black&label=LICENSE&style=flat-square&sanitize=true" alt="License"/></a>
+<a href="https://www.npmjs.com/package/@vh13294/nestjs-signed-url"><img src="https://img.shields.io/npm/v/@vh13294/nestjs-signed-url.svg?style=flat-square&sanitize=true" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/package/@vh13294/nestjs-signed-url"><img src="https://img.shields.io/npm/dm/@vh13294/nestjs-signed-url.svg?style=flat-square&sanitize=true" alt="NPM Downloads" /></a>
+<a href="#"><img src="https://img.shields.io/npm/l/@vh13294/nestjs-signed-url.svg?colorB=black&label=LICENSE&style=flat-square&sanitize=true" alt="License"/></a>
 
 </p>
 
