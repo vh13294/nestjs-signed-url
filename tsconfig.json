@@ -3,17 +3,21 @@
     "module": "commonjs",
     "declaration": true,
     "strict": true,
-    "noImplicitAny": false,
     "removeComments": true,
     "noLib": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2019",
-    "sourceMap": false,
+    "target": "es2018",
+    "sourceMap": true,
     "outDir": "./dist",
     "rootDir": "./lib",
     "skipLibCheck": true
   },
   "include": ["lib/**/*"],
-  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test",
+    "**/*spec.ts"
+  ]
 }
