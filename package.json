@@ -18,7 +18,7 @@
     "test": "jest"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "registry": "https://npm.pkg.github.com/@vh13294"
   },
   "repository": {
     "type": "git",
