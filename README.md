@@ -14,7 +14,7 @@
 
 # Description
 
-`Nestjs Signed Url` module for for [Nest](https://github.com/nestjs/nest) applications.
+`Signed URL` module for for [Nest](https://github.com/nestjs/nest) applications.
 
 # Installation
 
@@ -30,7 +30,7 @@ yarn add nestjs-signed-url
 
 # Requirements
 
-`nestjs-signed-url` is built to work with Nest 6 and newer versions.
+`nestjs-signed-url` is built to work with Nest 7 and newer versions.
 
 # Basic Usage
 
@@ -41,127 +41,98 @@ First you need to import this module into your main application module:
 > app.module.ts
 
 ```ts
-import { RateLimiterModule } from 'nestjs-signed-url';
+import { SignedUrlModule } from 'nestjs-signed-url';
 
-@Module({
-    imports: [RateLimiterModule],
-})
-export class ApplicationModule {}
-```
-
-### Using Interceptor
-
-Now you need to register the interceptor. You can do this only on some routes:
-
-> app.controller.ts
-
-```ts
-import { RateLimiterInterceptor } from 'nestjs-signed-url';
-
-@UseInterceptors(RateLimiterInterceptor)
-@Get('/login')
-public async login() {
-    console.log('hello');
-}
-```
-
-Or you can choose to register the interceptor globally:
-
-> app.module.ts
-
-```ts
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { RateLimiterModule, RateLimiterInterceptor } from 'nestjs-signed-url';
-
-@Module({
-    imports: [RateLimiterModule],
-    providers: [
-        {
-            provide: APP_INTERCEPTOR,
-            useClass: RateLimiterInterceptor,
-        },
-    ],
-})
-export class ApplicationModule {}
-```
-
-### With Decorator
-
-You can use the `@RateLimit` decorator to specify the points and duration for rate limiting on a per controller or per
-route basis:
-
-> app.controller.ts
-
-```ts
-import { RateLimit } from 'nestjs-signed-url';
-
-@RateLimit({ points: 1, duration: 60, errorMessage: 'Accounts cannot be created more than once in per minute' })
-@Get('/signup')
-public async signUp() {
-    console.log('hello');
-}
-```
-
-### With All Options
-
-The usage of the limiter options is as in the code block below. For an explanation of the each option, please see <code>[options](https://github.com/ozkanonur/nestjs-signed-url#options)</code>.
-
-```ts
 @Module({
     imports: [
-        // All the values here are defaults.
-        RateLimiterModule.register({
-            for: 'Express',
-            type: 'Memory',
-            keyPrefix: 'global',
-            points: 4,
-            pointsConsumed: 1,
-            inmemoryBlockOnConsumed: 0,
-            duration: 1,
-            blockDuration: 0,
-            inmemoryBlockDuration: 0,
-            queueEnabled: false,
-            whiteList: [],
-            blackList: [],
-            storeClient: undefined,
-            insuranceLimiter: undefined,
-            storeType: undefined,
-            dbName: undefined,
-            tableName: undefined,
-            tableCreated: undefined,
-            clearExpiredByTimeout: undefined,
-            execEvenly: false,
-            execEvenlyMinDelayMs: undefined,
-            indexKeyPrefix: {},
-            maxQueueSize: 100,
-            errorMessage: 'Rate limit exceeded'
-        }),
-    ],
-    providers: [
-        {
-            provide: APP_INTERCEPTOR,
-            useClass: RateLimiterInterceptor,
-        },
+        SignedUrlModule.forRoot({
+            secret: 'secret',
+            appUrl: 'localhost:3000',
+        })
     ],
 })
 export class ApplicationModule {}
 ```
 
-### Fastify based Graphql
-If you want to use this library on a fastify based graphql server, you need to override the graphql context in the app.module as shown below.
+Or Async Import With .ENV usage
+
 ```ts
-GraphQLModule.forRoot({
-    context: ({ request, reply }) => {
-        return { req: request, res: reply }
-    },
-}),
+export function signedUrlModuleConfig(): SignedUrlModuleOptions {
+    return {
+        secret: process.env.APP_KEY,
+        appUrl: process.env.APP_URL,
+    }
+};
+
+import { SignedUrlModule } from 'nestjs-signed-url';
+
+@Module({
+    imports: [
+        ConfigModule.forRoot(),
+        SignedUrlModule.forRootAsync({
+            useFactory: () => signedUrlModuleConfig(),
+        })
+    ],
+})
+export class ApplicationModule {}
 ```
 
-# Options
 
+### Using Service
+
+Now you need to register the service, by injecting it to the constructor.
+There are two methods for signing url:
+
+- signedControllerRoute(controller: Controller, controllerMethod: any, expirationDate: Date, params?: any)
+- signedRelativePathUrl(relativePath: string, expirationDate: Date, params?: any)
+
+> app.controller.ts
+
+```ts
+import { SignedUrlService } from 'nestjs-signed-url';
+
+@Get('makeSignedUrl')
+async makeSignedUrl(): Promise<string> {
+    const params = {
+        id: 1,
+        info: 1,
+    }
+
+    try {
+        return this.signedUrlService.signedControllerRoute(
+            AppController,
+            AppController.prototype.emailVerification,
+            new Date('2021-12-12'),
+            params
+        )
+    } catch (error) {
+        throw new BadRequestException(error.message)
+    }
+}
+```
+
+
+### Using Guard
+
+You can use @UseGuards(SignedUrlGuard) to verify the signed url in controller.
+If the url has been tampered or the expiration date is due, then a Forbidden exception will be thrown.
+
+> app.controller.ts
+
+```ts
+import { SignedUrlGuard } from 'nestjs-signed-url';
+
+@Get('emailVerification')
+@UseGuards(SignedUrlGuard)
+async emailVerification(): Promise<string> {
+    return 'You emailed has been verified.'
+}
+```
+
+### Note
+- Changing the secret key will invalidate all signed urls
+- Signed URL is typically used for unsubscribe email, email verification, sign file permission, and more.
 
 ## TODO
-- [ ] Create example projects for each technology
-- [ ] Support Websocket
-- [ ] Support Rpc
-- [ ] Tests & Github Actions (for automatic npm deployment on master branch)
+- [ ] Create test
+- [ ] Renovate Automated dependency updates
