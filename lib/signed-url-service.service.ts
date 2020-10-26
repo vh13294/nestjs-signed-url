@@ -15,7 +15,8 @@ import {
     isSignatureEqual,
     joinRoutes,
     checkIfParamsHasReservedKeys,
-    stringifyQueryParams
+    stringifyQueryParams,
+    ControllerMethod
 } from './helpers';
 
 @Injectable()
@@ -39,9 +40,9 @@ export class SignedUrlService {
 
     public signedControllerRoute(
         controller: Controller,
-        controllerMethod: any = {},
+        controllerMethod: ControllerMethod,
         expirationDate: Date,
-        params: any = {},
+        params: Record<string, unknown>,
     ): string {
         const controllerMethodFullRoute = getControllerMethodRoute(controller, controllerMethod)
 
@@ -55,7 +56,7 @@ export class SignedUrlService {
     public signedRelativePathUrl(
         relativePath: string,
         expirationDate: Date,
-        params: any = {},
+        params: Record<string, unknown> = {},
     ): string {
         if(checkIfParamsHasReservedKeys(params)) {
             throw new ConflictException(

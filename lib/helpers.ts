@@ -7,13 +7,15 @@ import { Controller } from '@nestjs/common/interfaces/controllers/controller.int
 import { RESERVED_PARAM_NAMES } from './signed-url.constants';
 
 
-export function stringifyQueryParams(params: any = {}): any {
+export type ControllerMethod = (...args: any[]) => Promise<any> | any
+
+export function stringifyQueryParams(params: Record<string, unknown>): string {
     return qsStringify(params)
 }
 
 export function getControllerMethodRoute(
     controller: Controller,
-    controllerMethod: any = {},
+    controllerMethod: ControllerMethod,
 ): string {
     const controllerRoute = Reflect.getMetadata(PATH_METADATA, controller)
     const methodRoute = Reflect.getMetadata(PATH_METADATA, controllerMethod)
@@ -47,7 +49,7 @@ export function signatureHasNotExpired(expiryDate: Date): boolean {
     return (expiryDate > currentDate)
 }
 
-export function checkIfParamsHasReservedKeys(params: Record<string, string>): boolean {
+export function checkIfParamsHasReservedKeys(params: Record<string, unknown>): boolean {
     const keyArr = Object.keys(params)
     return RESERVED_PARAM_NAMES.some(r => keyArr.includes(r))
 }
