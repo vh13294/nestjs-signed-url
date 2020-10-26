@@ -56,6 +56,13 @@ export class ApplicationModule {}
 
 Or Async Import With .ENV usage
 
+> .ENV
+
+```.env
+APP_KEY=secret
+APP_URL=localhost:3000
+```
+
 > signed-url.config.ts
 
 ```ts
@@ -97,27 +104,34 @@ There are two methods for signing url:
 ```ts
 import { SignedUrlService } from 'nestjs-signed-url';
 
-@Get('makeSignedUrl')
-async makeSignedUrl(): Promise<string> {
-    const params = {
-        id: 1,
-        info: 1,
-    }
+@Controller()
+export class AppController {
+    constructor(
+        private readonly signedUrlService: SignedUrlService,
+    ) { }
 
-    try {
-        return this.signedUrlService.signedControllerRoute(
-            AppController,
-            AppController.prototype.emailVerification,
-            new Date('2021-12-12'),
-            params
-        )
-    } catch (error) {
-        throw new BadRequestException(error.message)
+    @Get('makeSignedUrl')
+    async makeSignedUrl(): Promise<string> {
+        const params = {
+            id: 1,
+            info: 'info',
+        }
+
+        try {
+            return this.signedUrlService.signedControllerRoute(
+                AppController,
+                AppController.prototype.emailVerification,
+                new Date('2021-12-12'),
+                params
+            )
+        } catch (error) {
+            throw new BadRequestException(error.message)
+        }
     }
 }
 ```
 
-'expirationDate', 'signed' params are used internally by nestjs-signed-url.
+'expirationDate' and 'signed' params are used internally by nestjs-signed-url.
 
 Exception will be thrown if those params are used.
 
@@ -134,11 +148,19 @@ If the url has been tampered or when the expiration date is due, then a Forbidde
 ```ts
 import { SignedUrlGuard } from 'nestjs-signed-url';
 
-@Get('emailVerification')
-@UseGuards(SignedUrlGuard)
-async emailVerification(): Promise<string> {
-    return 'You emailed has been verified.'
+@Controller()
+export class AppController {
+    constructor(
+        private readonly signedUrlService: SignedUrlService,
+    ) { }
+
+    @Get('emailVerification')
+    @UseGuards(SignedUrlGuard)
+    async emailVerification(): Promise<string> {
+        return 'You emailed has been verified.'
+    }
 }
+
 ```
 
 

@@ -1,6 +1,6 @@
 {
   "name": "nestjs-signed-url",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "NestJs library for making signed url",
   "keywords": [
     "nestjs",
@@ -9,6 +9,7 @@
     "security"
   ],
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "directories": {
     "lib": "lib"
   },
