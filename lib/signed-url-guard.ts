@@ -13,10 +13,10 @@ export class SignedUrlGuard implements CanActivate {
         context: ExecutionContext,
     ): boolean | Promise<boolean> | Observable<boolean> {
         const request = context.switchToHttp().getRequest();
-        return this.validateRequest(request, request.query);
+        return this.validateRequest(request);
     }
 
-    private validateRequest(request: Request, query: Record<string, string>): boolean {
-        return this.signedUrlService.isSignatureValid(request, query)
+    private validateRequest(request: Request): boolean {
+        return this.signedUrlService.isSignatureValid(request, request.query)
     }
 }

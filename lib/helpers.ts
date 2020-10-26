@@ -1,7 +1,15 @@
 import { createHmac, timingSafeEqual } from 'crypto';
+import { stringify as qsStringify } from 'qs'
+
 import { PATH_METADATA } from '@nestjs/common/constants';
 import { Controller } from '@nestjs/common/interfaces/controllers/controller.interface';
+
 import { RESERVED_PARAM_NAMES } from './signed-url.constants';
+
+
+export function stringifyQueryParams(params: any = {}): any {
+    return qsStringify(params)
+}
 
 export function getControllerMethodRoute(
     controller: Controller,

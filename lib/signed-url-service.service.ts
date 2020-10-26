@@ -1,13 +1,22 @@
-import { ApplicationConfig } from '@nestjs/core';
-import { Inject, Injectable, Logger, ForbiddenException, ConflictException } from '@nestjs/common';
-import { Controller } from '@nestjs/common/interfaces/controllers/controller.interface';
 import { Request } from 'express';
+
+import { ApplicationConfig } from '@nestjs/core';
+import { Controller } from '@nestjs/common/interfaces/controllers/controller.interface';
+import { Inject, Injectable, Logger, ForbiddenException, ConflictException } from '@nestjs/common';
 
 import { SignedUrlModuleOptions } from './signed-url-options.interface';
 import { RESERVED_PARAM_NAMES, SIGNED_URL_MODULE_OPTIONS } from './signed-url.constants';
 
-import { stringify as stringifyParams } from 'querystring';
-import { appendParams, generateHmac, getControllerMethodRoute, signatureHasNotExpired, isSignatureEqual, joinRoutes, checkIfParamsHasReservedKeys } from './helpers';
+import { 
+    appendParams,
+    generateHmac,
+    getControllerMethodRoute,
+    signatureHasNotExpired,
+    isSignatureEqual,
+    joinRoutes,
+    checkIfParamsHasReservedKeys,
+    stringifyQueryParams
+} from './helpers';
 
 @Injectable()
 export class SignedUrlService {
@@ -63,7 +72,7 @@ export class SignedUrlService {
                 prefix,
                 relativePath,
             ),
-            stringifyParams(params)
+            stringifyQueryParams(params)
         )
 
         const urlWithoutHash = generateURL()
@@ -76,9 +85,10 @@ export class SignedUrlService {
         return urlWithHash
     }
 
-    public isSignatureValid(request: Request, query: Record<string, string>): boolean {
+    public isSignatureValid(request: Request, query: any = {}): boolean {
         const { signed, ...restQuery } = query;
-        const fullUrl = `${request.headers.host}${request.route.path}?${stringifyParams(restQuery)}`
+        const fullUrl = `${request.headers.host}${request.route.path}?${stringifyQueryParams(restQuery)}`
+        
         const hmac = generateHmac(fullUrl, this.signedUrlModuleOptions.secret)
         const expiryDate = new Date(restQuery.expirationDate)
 
