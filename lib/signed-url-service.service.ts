@@ -1,5 +1,5 @@
 import { ApplicationConfig } from '@nestjs/core';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, ForbiddenException, ConflictException } from '@nestjs/common';
 import { Controller } from '@nestjs/common/interfaces/controllers/controller.interface';
 import { Request } from 'express';
 
@@ -49,7 +49,7 @@ export class SignedUrlService {
         params: any = {},
     ): string {
         if(checkIfParamsHasReservedKeys(params)) {
-            throw new Error(
+            throw new ConflictException(
                 'Your target URL has a query param that is used for signing a route.' +
                 ` eg. [${RESERVED_PARAM_NAMES.join(', ')}]`
             );
@@ -83,7 +83,7 @@ export class SignedUrlService {
         const expiryDate = new Date(restQuery.expirationDate)
 
         if (!signed || !hmac) {
-            throw new Error('Invalid Url')
+            throw new ForbiddenException('Invalid Url')
         } else {
             return isSignatureEqual(signed, hmac) && signatureHasNotExpired(expiryDate);
         }

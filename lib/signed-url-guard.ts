@@ -1,4 +1,4 @@
-import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { SignedUrlService } from './signed-url-service.service';
 import { Request } from 'express';
@@ -17,12 +17,6 @@ export class SignedUrlGuard implements CanActivate {
     }
 
     private validateRequest(request: Request, query: Record<string, string>): boolean {
-        try {
-            return this.signedUrlService.isSignatureValid(request, query)
-        } catch (error) {
-            // return false
-            // todo
-            throw new ForbiddenException('Invalid url')
-        }
+        return this.signedUrlService.isSignatureValid(request, query)
     }
 }
