@@ -84,7 +84,7 @@ export class ApplicationModule {}
 ```
 
 
-### Using Service
+## Using Service
 
 Now you need to register the service, by injecting it to the constructor.
 There are two methods for signing url:
@@ -121,7 +121,9 @@ async makeSignedUrl(): Promise<string> {
 
 Exception will be thrown if those params are used.
 
-### Using Guard
+
+
+## Using Guard
 
 You can use @UseGuards(SignedUrlGuard) to verify the signed url in controller.
 
@@ -139,10 +141,12 @@ async emailVerification(): Promise<string> {
 }
 ```
 
-### Note
+
+## Note
 - Changing the secret key will invalidate all signed urls
 - Signed URL is typically used for unsubscribe email, email verification, sign file permission, and more.
 
-## TODO
+
+### TODO
 - [ ] Create test
 - [ ] Renovate Automated dependency updates

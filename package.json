@@ -17,6 +17,7 @@
     "build": "tsc -p tsconfig.json",
     "test": "jest"
   },
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vh13294/nestjs-signed-url.git"
