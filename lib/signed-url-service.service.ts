@@ -50,7 +50,7 @@ export class SignedUrlService {
     ): string {
         if(checkIfParamsHasReservedKeys(params)) {
             throw new Error(
-                'Your target URL has a query param that have a reserved parameter for signing a route.' +
+                'Your target URL has a query param that is used for signing a route.' +
                 ` eg. [${RESERVED_PARAM_NAMES.join(', ')}]`
             );
         }
@@ -67,10 +67,11 @@ export class SignedUrlService {
         )
 
         const urlWithoutHash = generateURL()
+
         const hmac = generateHmac(urlWithoutHash, this.signedUrlModuleOptions.secret)
         params.signed = hmac
+        
         const urlWithHash = generateURL()
-        params.key
 
         return urlWithHash
     }

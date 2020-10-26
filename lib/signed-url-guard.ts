@@ -22,7 +22,7 @@ export class SignedUrlGuard implements CanActivate {
         } catch (error) {
             // return false
             // todo
-            throw new ForbiddenException('Invalid url ,with custom error message')
+            throw new ForbiddenException('Invalid url')
         }
     }
 }
