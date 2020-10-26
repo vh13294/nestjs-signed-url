@@ -139,7 +139,7 @@ Exception will be thrown if those params are used.
 
 ## Using Guard
 
-You can use @UseGuards(SignedUrlGuard) to verify the signed url in controller.
+You can use SignedUrlGuard to verify the signed url in controller.
 
 If the url has been tampered or when the expiration date is due, then a Forbidden exception will be thrown.
 
