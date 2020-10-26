@@ -117,16 +117,12 @@ export class AppController {
             info: 'info',
         }
 
-        try {
-            return this.signedUrlService.signedControllerRoute(
-                AppController,
-                AppController.prototype.emailVerification,
-                new Date('2021-12-12'),
-                params
-            )
-        } catch (error) {
-            throw new BadRequestException(error.message)
-        }
+        return this.signedUrlService.signedControllerRoute(
+            AppController,
+            AppController.prototype.emailVerification,
+            new Date('2021-12-12'),
+            params
+        )
     }
 }
 ```
