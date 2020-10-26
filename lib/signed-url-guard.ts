@@ -1,4 +1,4 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, MethodNotAllowedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { SignedUrlService } from './signed-url-service.service';
 import { Request } from 'express';
@@ -17,6 +17,14 @@ export class SignedUrlGuard implements CanActivate {
     }
 
     private validateRequest(request: Request): boolean {
-        return this.signedUrlService.isSignatureValid(request, request.query)
+        if(!request.headers.host) {
+            throw new MethodNotAllowedException('Unable to derive host name from request')
+        }
+
+        return this.signedUrlService.isSignatureValid(
+            request.headers.host,
+            request.route.path,
+            request.query,
+        )
     }
 }

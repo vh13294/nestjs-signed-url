@@ -1,20 +1,18 @@
-import { Request } from 'express';
-
 import { ApplicationConfig } from '@nestjs/core';
 import { Controller } from '@nestjs/common/interfaces/controllers/controller.interface';
 import { Inject, Injectable, Logger, ForbiddenException, ConflictException } from '@nestjs/common';
 
 import { SignedUrlModuleOptions } from './signed-url-options.interface';
-import { RESERVED_PARAM_NAMES, SIGNED_URL_MODULE_OPTIONS } from './signed-url.constants';
+import { RESERVED_QUERY_PARAM_NAMES, SIGNED_URL_MODULE_OPTIONS } from './signed-url.constants';
 
 import { 
-    appendParams,
+    appendQueryParams,
     generateHmac,
     getControllerMethodRoute,
     signatureHasNotExpired,
     isSignatureEqual,
     joinRoutes,
-    checkIfParamsHasReservedKeys,
+    checkIfQueryHasReservedKeys,
     stringifyQueryParams,
     ControllerMethod
 } from './helpers';
@@ -42,53 +40,53 @@ export class SignedUrlService {
         controller: Controller,
         controllerMethod: ControllerMethod,
         expirationDate: Date,
-        params: Record<string, unknown>,
+        query: Record<string, unknown>,
     ): string {
         const controllerMethodFullRoute = getControllerMethodRoute(controller, controllerMethod)
 
         return this.signedRelativePathUrl(
             controllerMethodFullRoute,
             expirationDate,
-            params
+            query
         )
     }
 
     public signedRelativePathUrl(
         relativePath: string,
         expirationDate: Date,
-        params: Record<string, unknown> = {},
+        query: Record<string, unknown> = {},
     ): string {
-        if(checkIfParamsHasReservedKeys(params)) {
+        if(checkIfQueryHasReservedKeys(query)) {
             throw new ConflictException(
                 'Your target URL has a query param that is used for signing a route.' +
-                ` eg. [${RESERVED_PARAM_NAMES.join(', ')}]`
+                ` eg. [${RESERVED_QUERY_PARAM_NAMES.join(', ')}]`
             );
         }
         const prefix = this.applicationConfig.getGlobalPrefix()
-        params.expirationDate = expirationDate.toISOString()
+        query.expirationDate = expirationDate.toISOString()
 
-        const generateURL = () => appendParams(
+        const generateURL = () => appendQueryParams(
             joinRoutes(
                 this.signedUrlModuleOptions.appUrl,
                 prefix,
                 relativePath,
             ),
-            stringifyQueryParams(params)
+            stringifyQueryParams(query)
         )
 
         const urlWithoutHash = generateURL()
 
         const hmac = generateHmac(urlWithoutHash, this.signedUrlModuleOptions.secret)
-        params.signed = hmac
+        query.signed = hmac
         
         const urlWithHash = generateURL()
 
         return urlWithHash
     }
 
-    public isSignatureValid(request: Request, query: any = {}): boolean {
+    public isSignatureValid(host: string, routePath: string, query: any = {}): boolean {
         const { signed, ...restQuery } = query;
-        const fullUrl = `${request.headers.host}${request.route.path}?${stringifyQueryParams(restQuery)}`
+        const fullUrl = `${host}${routePath}?${stringifyQueryParams(restQuery)}`
         
         const hmac = generateHmac(fullUrl, this.signedUrlModuleOptions.secret)
         const expiryDate = new Date(restQuery.expirationDate)

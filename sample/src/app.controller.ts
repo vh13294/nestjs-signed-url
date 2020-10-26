@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { SignedUrlGuard, SignedUrlService } from 'nestjs-signed-url';
 import { Request } from 'express';
 
@@ -13,10 +13,16 @@ export class AppController {
     return 'hello world'
   }
 
-  @Get('emailVerification')
+  @Get('emailVerification/:version/:user')
   @UseGuards(SignedUrlGuard)
   async emailVerification(@Req() request: Request): Promise<any> {
-    return request.query
+    const query = request.query
+    const params = request.params
+
+    return {
+      query,
+      params
+    }
   }
 
   @Get('makeSignedUrl')
@@ -29,12 +35,6 @@ export class AppController {
         {
           a: 'apple',
           b: 'book'
-        }, {
-          a: 'apple',
-          b: 'book'
-        }, {
-          a: 'apple',
-          b: 'book'
         }
       ],
       dict: {
@@ -45,13 +45,6 @@ export class AppController {
             a: 'apple',
             b: 'book'
           },
-          {
-            a: 'apple',
-            b: 'book'
-          }, {
-            a: 'apple',
-            b: 'book'
-          }
         ]
       }
     }

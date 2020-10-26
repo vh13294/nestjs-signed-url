@@ -1,6 +1,6 @@
 {
   "name": "nestjs-signed-url",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "NestJs library for making signed url",
   "keywords": [
     "nestjs",
@@ -16,6 +16,7 @@
   "scripts": {
     "prebuild": "rm -rf dist",
     "build": "tsc -p tsconfig.json",
+    "postbuild": "npm pack",
     "test": "jest"
   },
   "repository": {

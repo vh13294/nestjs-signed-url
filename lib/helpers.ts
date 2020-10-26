@@ -4,13 +4,13 @@ import { stringify as qsStringify } from 'qs'
 import { PATH_METADATA } from '@nestjs/common/constants';
 import { Controller } from '@nestjs/common/interfaces/controllers/controller.interface';
 
-import { RESERVED_PARAM_NAMES } from './signed-url.constants';
+import { RESERVED_QUERY_PARAM_NAMES } from './signed-url.constants';
 
 
 export type ControllerMethod = (...args: any[]) => Promise<any> | any
 
-export function stringifyQueryParams(params: Record<string, unknown>): string {
-    return qsStringify(params)
+export function stringifyQueryParams(query: Record<string, unknown>): string {
+    return qsStringify(query)
 }
 
 export function getControllerMethodRoute(
@@ -30,8 +30,8 @@ export function joinRoutes(...routes: string[]): string {
     return routes.filter(route => isRouteNotEmpty(route)).join('/')
 }
 
-export function appendParams(route: string, params: string): string {
-    return `${route}?${params}`
+export function appendQueryParams(route: string, query: string): string {
+    return `${route}?${query}`
 }
 
 export function generateHmac(url: string, secret: string): string {
@@ -49,7 +49,7 @@ export function signatureHasNotExpired(expiryDate: Date): boolean {
     return (expiryDate > currentDate)
 }
 
-export function checkIfParamsHasReservedKeys(params: Record<string, unknown>): boolean {
-    const keyArr = Object.keys(params)
-    return RESERVED_PARAM_NAMES.some(r => keyArr.includes(r))
+export function checkIfQueryHasReservedKeys(query: Record<string, unknown>): boolean {
+    const keyArr = Object.keys(query)
+    return RESERVED_QUERY_PARAM_NAMES.some((r: string) => keyArr.includes(r))
 }

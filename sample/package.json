@@ -25,7 +25,7 @@
     "@nestjs/config": "^0.5.0",
     "@nestjs/core": "^7.4.4",
     "@nestjs/platform-express": "^7.4.4",
-    "nestjs-signed-url": "file:..",
+    "nestjs-signed-url": "file:../nestjs-signed-url-0.0.10.tgz",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.3"

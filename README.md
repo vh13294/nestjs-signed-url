@@ -166,5 +166,7 @@ export class AppController {
 
 
 ### TODO
-- [ ] Create test
+- [ ] Create test (expiration, query clash, tampered, with or without globalPrefix, request with query & param)
 - [ ] Renovate Automated dependency updates
+- [ ] Add params obj(check if key exists in url) long with query obj
+- [ ] Automate CI, npm run build, push, npm publish, npm i (in sample after rebuild)
