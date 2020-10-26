@@ -36,7 +36,7 @@ yarn add nestjs-signed-url
 
 ### Include Module
 
-First you need to import this module into your main application module:
+First you need to import this module into your module:
 
 > app.module.ts
 
@@ -56,6 +56,8 @@ export class ApplicationModule {}
 
 Or Async Import With .ENV usage
 
+> signed-url.config.ts
+
 ```ts
 export function signedUrlModuleConfig(): SignedUrlModuleOptions {
     return {
@@ -63,7 +65,11 @@ export function signedUrlModuleConfig(): SignedUrlModuleOptions {
         appUrl: process.env.APP_URL,
     }
 };
+```
 
+> app.module.ts
+
+```ts
 import { SignedUrlModule } from 'nestjs-signed-url';
 
 @Module({
@@ -111,11 +117,15 @@ async makeSignedUrl(): Promise<string> {
 }
 ```
 
+'expirationDate', 'signed' params are used internally by nestjs-signed-url.
+
+Exception will be thrown if those params are used.
 
 ### Using Guard
 
 You can use @UseGuards(SignedUrlGuard) to verify the signed url in controller.
-If the url has been tampered or the expiration date is due, then a Forbidden exception will be thrown.
+
+If the url has been tampered or when the expiration date is due, then a Forbidden exception will be thrown.
 
 > app.controller.ts
 
