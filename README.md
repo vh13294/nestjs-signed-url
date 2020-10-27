@@ -147,19 +147,8 @@ Exception will be thrown if those query are used.
 
 ### Reminder
 
+<img width="40%" src="https://user-images.githubusercontent.com/17086745/97279922-2ae43480-186e-11eb-8946-acf3f168def8.png" />
 <br>
-Difference between Params & Query in ExpressJS
-<br>
-<span>
-  URL: domain.com
-  <span style="color:cyan">/:version/:id</span>
-  <span style="color:salmon">?a=1&b=2</span>
-</span>
-<br>
-<span style="color:cyan">Cyan section is referred to as Params</span>
-<br>
-<span style="color:salmon">Orange section is referred to as Query</span>
-<br><br>
 
 
 ## Using Guard
