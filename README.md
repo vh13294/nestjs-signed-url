@@ -147,7 +147,7 @@ Exception will be thrown if those query are used.
 
 ### Reminder
 
-<img width="40%" src="https://user-images.githubusercontent.com/17086745/97279922-2ae43480-186e-11eb-8946-acf3f168def8.png" />
+<img width="60%" src="https://user-images.githubusercontent.com/17086745/97279922-2ae43480-186e-11eb-8946-acf3f168def8.png" />
 <br>
 
 
