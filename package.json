@@ -14,9 +14,9 @@
     "lib": "lib"
   },
   "scripts": {
-    "prebuild": "rm -rf dist",
+    "prebuild": "rm -rf dist && rm *.tgz",
     "build": "tsc -p tsconfig.json",
-    "postbuild": "npm pack",
+    "postbuild": "npm pack && mv nestjs-signed-url-*.tgz nestjs.tgz",
     "test": "jest"
   },
   "repository": {
