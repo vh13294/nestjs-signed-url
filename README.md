@@ -96,9 +96,20 @@ export class ApplicationModule {}
 Now you need to register the service, by injecting it to the constructor.
 There are two methods for signing url:
 
-- signedControllerRoute(controller: Controller, controllerMethod: any, expirationDate: Date, params?: any)
-- signedRelativePathUrl(relativePath: string, expirationDate: Date, params?: any)
+```typescript
+signedControllerRoute(
+    controller: Controller,
+    controllerMethod: ControllerMethod,
+    expirationDate: Date,
+    query: Record<string, unknown>
+)
 
+signedRelativePathUrl(
+    relativePath: string,
+    expirationDate: Date,
+    query?: Record<string, unknown>
+)
+```
 > app.controller.ts
 
 ```ts
@@ -112,7 +123,7 @@ export class AppController {
 
     @Get('makeSignedUrl')
     async makeSignedUrl(): Promise<string> {
-        const params = {
+        const query = {
             id: 1,
             info: 'info',
         }
@@ -121,15 +132,15 @@ export class AppController {
             AppController,
             AppController.prototype.emailVerification,
             new Date('2021-12-12'),
-            params
+            query
         )
     }
 }
 ```
 
-'expirationDate' and 'signed' params are used internally by nestjs-signed-url.
+'expirationDate' and 'signed' query are used internally by nestjs-signed-url.
 
-Exception will be thrown if those params are used.
+Exception will be thrown if those query are used.
 
 
 
@@ -168,5 +179,5 @@ export class AppController {
 ### TODO
 - [ ] Create test (expiration, query clash, tampered, with or without globalPrefix, request with query & param)
 - [ ] Renovate Automated dependency updates
-- [ ] Add params obj(check if key exists in url) long with query obj
+- [ ] Add params obj(check if key duplicate in url & replace /:a/:b) long with query obj
 - [ ] Automate CI, npm run build, push, npm publish, npm i (in sample after rebuild)
