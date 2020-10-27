@@ -1,11 +1,11 @@
 import { ApplicationConfig } from '@nestjs/core';
 import { Controller } from '@nestjs/common/interfaces/controllers/controller.interface';
-import { Inject, Injectable, Logger, ForbiddenException, ConflictException } from '@nestjs/common';
+import { Inject, Injectable, Logger, ForbiddenException, ConflictException, BadRequestException } from '@nestjs/common';
 
 import { SignedUrlModuleOptions } from './signed-url-options.interface';
 import { RESERVED_QUERY_PARAM_NAMES, SIGNED_URL_MODULE_OPTIONS } from './signed-url.constants';
 
-import { 
+import {
     appendQueryParams,
     generateHmac,
     getControllerMethodRoute,
@@ -14,7 +14,9 @@ import {
     joinRoutes,
     checkIfQueryHasReservedKeys,
     stringifyQueryParams,
-    ControllerMethod
+    ControllerMethod,
+    isParamsNameInURL,
+    replaceParamsString
 } from './helpers';
 
 @Injectable()
@@ -31,7 +33,7 @@ export class SignedUrlService {
             Logger.warn('[signedUrlModuleOptions] A min key length of 256-bit or 32-characters is recommended')
         }
 
-        if(!this.signedUrlModuleOptions.appUrl) {
+        if (!this.signedUrlModuleOptions.appUrl) {
             throw new Error('The app url must not be empty');
         }
     }
@@ -41,13 +43,15 @@ export class SignedUrlService {
         controllerMethod: ControllerMethod,
         expirationDate: Date,
         query: any = {},
+        params: any = {},
     ): string {
         const controllerMethodFullRoute = getControllerMethodRoute(controller, controllerMethod)
 
         return this.signedRelativePathUrl(
             controllerMethodFullRoute,
             expirationDate,
-            query
+            query,
+            params
         )
     }
 
@@ -55,13 +59,23 @@ export class SignedUrlService {
         relativePath: string,
         expirationDate: Date,
         query: any = {},
+        params: any = {}
     ): string {
-        if(checkIfQueryHasReservedKeys(query)) {
+        if (checkIfQueryHasReservedKeys(query)) {
             throw new ConflictException(
                 'Your target URL has a query param that is used for signing a route.' +
                 ` eg. [${RESERVED_QUERY_PARAM_NAMES.join(', ')}]`
-            );
+            )
         }
+
+        if (params) {
+            if (isParamsNameInURL(relativePath, params)) {
+                relativePath = replaceParamsString(relativePath, params)
+            } else {
+                throw new BadRequestException('One of the params name does not exist in target URL')
+            }
+        }
+
         const prefix = this.applicationConfig.getGlobalPrefix()
         query.expirationDate = expirationDate.toISOString()
 
@@ -78,7 +92,7 @@ export class SignedUrlService {
 
         const hmac = generateHmac(urlWithoutHash, this.signedUrlModuleOptions.secret)
         query.signed = hmac
-        
+
         const urlWithHash = generateURL()
 
         return urlWithHash
@@ -87,7 +101,7 @@ export class SignedUrlService {
     public isSignatureValid(host: string, routePath: string, query: any = {}): boolean {
         const { signed, ...restQuery } = query;
         const fullUrl = `${host}${routePath}?${stringifyQueryParams(restQuery)}`
-        
+
         const hmac = generateHmac(fullUrl, this.signedUrlModuleOptions.secret)
         const expiryDate = new Date(restQuery.expirationDate)
 

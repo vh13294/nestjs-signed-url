@@ -30,6 +30,20 @@ export function joinRoutes(...routes: string[]): string {
     return routes.filter(route => isRouteNotEmpty(route)).join('/')
 }
 
+export function isParamsNameInURL(route: string, params: Record<string, string>): boolean {
+    const routeParts = route.split('/:')
+    return Object.keys(params).every(param => {
+        return routeParts.includes(param)
+    })
+}
+
+export function replaceParamsString(route: string, params: Record<string, string>): string {
+    for (const [key, value] of Object.entries(params)) {
+        route = route.replace(`:${key}`, encodeURIComponent(value))
+    }
+    return route
+}
+
 export function appendQueryParams(route: string, query: string): string {
     return `${route}?${query}`
 }

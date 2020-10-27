@@ -1,6 +1,7 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { SignedUrlGuard, SignedUrlService } from 'nestjs-signed-url';
-import { Request } from 'express';
+import { EmailParams } from './params/email.params';
+import { EmailQuery } from './query/email.query';
 
 @Controller()
 export class AppController {
@@ -13,39 +14,31 @@ export class AppController {
     return 'hello world'
   }
 
-  @Get('emailVerification/:version/:user')
+  @Get('emailVerification/:version/:userId')
   @UseGuards(SignedUrlGuard)
-  async emailVerification(@Req() request: Request): Promise<any> {
-    const query = request.query
-    const params = request.params
-
+  async emailVerification(
+    @Param() emailParams: EmailParams,
+    @Query() emailQuery: EmailQuery
+  ): Promise<any> {
     return {
-      query,
-      params
+      emailParams,
+      emailQuery
     }
   }
 
   @Get('makeSignedUrl')
   async makeSignedUrl(): Promise<string> {
-    const params = {
-      id: 1,
-      reset: false,
-      arr: [1, 2, 3],
-      arr1: [
-        {
-          a: 'apple',
-          b: 'book'
-        }
-      ],
-      dict: {
-        a: 'apple',
-        b: 'book',
-        c: [
-          {
-            a: 'apple',
-            b: 'book'
-          },
-        ]
+    const emailParams = {
+      version: '1.0//.%$',
+      userId: true
+    }
+
+    const query: EmailQuery = {
+      email: 'email',
+      userId: 1,
+      userProfile: {
+        name: 'name',
+        dateOfBirth: new Date
       }
     }
 
@@ -53,7 +46,8 @@ export class AppController {
       AppController,
       AppController.prototype.emailVerification,
       new Date('2021-12-12'),
-      params
+      query,
+      emailParams
     )
     return signedUrl
   }

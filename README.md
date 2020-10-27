@@ -101,13 +101,15 @@ signedControllerRoute(
     controller: Controller,
     controllerMethod: ControllerMethod,
     expirationDate: Date,
-    query?: any
+    query?: any,
+    params?: any
 )
 
 signedRelativePathUrl(
     relativePath: string,
     expirationDate: Date,
-    query?: any
+    query?: any,
+    params?: any
 )
 ```
 > app.controller.ts
@@ -142,6 +144,22 @@ export class AppController {
 
 Exception will be thrown if those query are used.
 
+
+### Reminder
+
+<br>
+Difference between Params & Query in ExpressJS
+<br>
+<span>
+  URL: domain.com
+  <span style="color:cyan">/:version/:id</span>
+  <span style="color:salmon">?a=1&b=2</span>
+</span>
+<br>
+<span style="color:cyan">Cyan section is referred to as Params</span>
+<br>
+<span style="color:salmon">Orange section is referred to as Query</span>
+<br><br>
 
 
 ## Using Guard
