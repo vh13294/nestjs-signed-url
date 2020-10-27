@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { SignedUrlGuard, SignedUrlService } from 'nestjs-signed-url';
 import { Request } from 'express';
 

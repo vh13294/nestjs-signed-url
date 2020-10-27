@@ -40,7 +40,7 @@ export class SignedUrlService {
         controller: Controller,
         controllerMethod: ControllerMethod,
         expirationDate: Date,
-        query: Record<string, unknown>,
+        query: any = {},
     ): string {
         const controllerMethodFullRoute = getControllerMethodRoute(controller, controllerMethod)
 
@@ -54,7 +54,7 @@ export class SignedUrlService {
     public signedRelativePathUrl(
         relativePath: string,
         expirationDate: Date,
-        query: Record<string, unknown> = {},
+        query: any = {},
     ): string {
         if(checkIfQueryHasReservedKeys(query)) {
             throw new ConflictException(

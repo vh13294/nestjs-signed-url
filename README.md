@@ -101,13 +101,13 @@ signedControllerRoute(
     controller: Controller,
     controllerMethod: ControllerMethod,
     expirationDate: Date,
-    query: Record<string, unknown>
+    query?: any
 )
 
 signedRelativePathUrl(
     relativePath: string,
     expirationDate: Date,
-    query?: Record<string, unknown>
+    query?: any
 )
 ```
 > app.controller.ts
