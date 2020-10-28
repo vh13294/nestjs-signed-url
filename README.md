@@ -1,3 +1,7 @@
+## Project Status
+
+nestjs-signed-url has been moved to [nestjs-url-generator](https://github.com/vh13294/nestjs-url-generator/).
+
 <p align="center">
   <img width="40%" src="https://user-images.githubusercontent.com/17086745/97110220-8bf2f780-170a-11eb-9bf4-ca38b8d41be9.png" />
 </p>
